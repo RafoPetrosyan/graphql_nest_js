@@ -1,6 +1,5 @@
 import { registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from '../user/user.entity';
 
 const config = {
   type: 'postgres',
@@ -9,9 +8,10 @@ const config = {
   username: 'postgres',
   password: 'root',
   database: 'graphql_db',
-  entities: [User],
-  synchronize: false,
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  migrations: ['dist/migrations/*{.ts,.js}'],
   autoLoadEntities: true,
+  synchronize: false,
 };
 
 export default registerAs('typeorm', () => config);
