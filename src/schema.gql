@@ -8,8 +8,13 @@ type User {
   email: String!
 }
 
-type Query {
+type PaginatedUsers {
   users: [User!]!
+  totalCount: Int!
+}
+
+type Query {
+  users(limit: Int! = 10, offset: Int! = 0): PaginatedUsers!
   user(id: Int!): User!
 }
 

@@ -3,6 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
+interface IAllData {
+  users: User[];
+  totalCount: number;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -10,8 +15,12 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(limit: number, offset: number): Promise<IAllData> {
+    const [users, totalCount] = await this.usersRepository.findAndCount({
+      take: limit,
+      skip: offset,
+    });
+    return { users, totalCount };
   }
 
   findOne(id: number): Promise<User> {
