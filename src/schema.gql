@@ -1,0 +1,52 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Profile {
+  id: ID!
+  bio: String!
+  avatar_url: String!
+}
+
+type UserSettings {
+  id: ID!
+  theme: String!
+  language: String!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+}
+
+type Comment {
+  id: ID!
+  text: String!
+}
+
+type Order {
+  id: ID!
+  product_name: String!
+  price: Float!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  profile: Profile
+  settings: UserSettings
+  posts: [Post!]
+  comments: [Comment!]
+  orders: [Order!]
+}
+
+type PaginatedUsers {
+  users: [User!]!
+  totalCount: Int!
+}
+
+type Query {
+  paginatedUsers(limit: Int! = 10, offset: Int! = 0, search: String): PaginatedUsers!
+}
