@@ -27,6 +27,10 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  phone?: string;
+
   @Field(() => Profile, { nullable: true })
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   profile: Profile;

@@ -6,10 +6,12 @@ import {
   ObjectType,
   Field,
   Info,
+  Mutation,
 } from '@nestjs/graphql';
 import { GraphQLResolveInfo } from 'graphql';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
+import { CreateUserInput } from './dto/create-user.input';
 
 @ObjectType()
 class PaginatedUsers {
@@ -32,5 +34,12 @@ export class UserResolver {
     @Args('search', { type: () => String, nullable: true }) search?: string,
   ): Promise<PaginatedUsers> {
     return this.userService.findPaginated(limit, offset, info, search);
+  }
+
+  @Mutation(() => User)
+  createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ): Promise<User> {
+    return this.userService.create(createUserInput);
   }
 }

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { GraphQLResolveInfo } from 'graphql';
 import * as graphqlFields from 'graphql-fields';
+import { CreateUserInput } from './dto/create-user.input';
 
 @Injectable()
 export class UserService {
@@ -37,5 +38,18 @@ export class UserService {
     });
 
     return { users, totalCount };
+  }
+
+  async create(createUserInput: CreateUserInput): Promise<User> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserInput.email },
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('Email is already in use');
+    }
+
+    const newUser = this.userRepository.create(createUserInput);
+    return await this.userRepository.save(newUser);
   }
 }
